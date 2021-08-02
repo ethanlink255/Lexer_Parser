@@ -39,15 +39,24 @@ public class TypeTransformer {
 		if (typ2 == Type.FLOAT)
 			t1 = new Unary (new Operator(Operator.I2F), t1);
 		return new Binary(b.op.intMap(b.op.val), t1,t2);
+        else if (typ2 == Type.DOUBLE)  // New Type DOUBLE
+			t1 = new Unary (new Operator(Operator.I2D), t1);
+		return new Binary(b.op.intMap(b.op.val), t1,t2);
             } else if (typ1 == Type.FLOAT) { 
 	        if (typ2 == Type.INT)	
 			t2 = new Unary (new Operator(Operator.I2F), t2);
                 return new Binary(b.op.floatMap(b.op.val), t1,t2);
-            } else if (typ1 == Type.CHAR) 
+            } else if (typ1 == Type.DOUBLE) { // New Type DOUBLE
+	        if (typ2 == Type.INT)	
+			t2 = new Unary (new Operator(Operator.I2D), t2);
+                return new Binary(b.op.doubleMap(b.op.val), t1,t2);
+            }      
+            else if (typ1 == Type.CHAR) 
                 return new Binary(b.op.charMap(b.op.val), t1,t2);
             else if (typ1 == Type.BOOL) 
                 return new Binary(b.op.boolMap(b.op.val), t1,t2);
             throw new IllegalArgumentException("should never reach here");
+
         }
         // student exercise
 	if (e instanceof Unary) {
@@ -58,6 +67,8 @@ public class TypeTransformer {
 		return new Unary(u.op.intMap(u.op.val), t);
 	    else if (typ == Type.FLOAT)
 		return new Unary(u.op.floatMap(u.op.val), t);
+        else if (typ == Type.DOUBLE) // New Type DOUBLE
+		return new Unary(u.op.doubleMap(u.op.val), t);
 	    else if (typ == Type.CHAR)
 		return new Unary(u.op.charMap(u.op.val), t);
 	    else if (typ == Type.BOOL)
@@ -78,6 +89,12 @@ public class TypeTransformer {
 			if (param_types.get(i).equals(Type.FLOAT)) {
 				if (current_arg_type.equals(Type.INT))
 					c.args.set(i, new Unary(new Operator(Operator.I2F), T(c.args.get(i), tm)));	
+				else
+					c.args.set(i, T(c.args.get(i), tm));
+			}
+            else if (param_types.get(i).equals(Type.DOUBLE)) {  // New Type DOUBLE
+				if (current_arg_type.equals(Type.INT))
+					c.args.set(i, new Unary(new Operator(Operator.I2D), T(c.args.get(i), tm)));	
 				else
 					c.args.set(i, T(c.args.get(i), tm));
 			}
@@ -109,6 +126,12 @@ public class TypeTransformer {
                 if (srctype == Type.INT) {
                     src = new Unary(new Operator(Operator.I2F), src);
                     srctype = Type.FLOAT;
+                }
+            }
+            if (ttype == Type.DOUBLE) {  // New Type DOUBLE
+                if (srctype == Type.INT) {
+                    src = new Unary(new Operator(Operator.I2D), src);
+                    srctype = Type.DOUBLE;
                 }
             }
             else if (ttype == Type.INT) {
@@ -158,6 +181,12 @@ public class TypeTransformer {
 			if (param_types.get(i).equals(Type.FLOAT)) {
 				if (current_arg_type.equals(Type.INT))
 					c.args.set(i, new Unary(new Operator(Operator.I2F), T(c.args.get(i), tm)));	
+				else
+					c.args.set(i, T(c.args.get(i), tm));
+			}
+            else if (param_types.get(i).equals(Type.DOUBLE)) { // New Type DOUBLE
+				if (current_arg_type.equals(Type.INT))
+					c.args.set(i, new Unary(new Operator(Operator.I2D), T(c.args.get(i), tm)));	
 				else
 					c.args.set(i, T(c.args.get(i), tm));
 			}

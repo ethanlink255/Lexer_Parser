@@ -174,6 +174,26 @@ public class Semantics {
         if (op.val.equals(Operator.FLOAT_DIV)) 
             return new FloatValue(v1.floatValue( ) / v2.floatValue( ));
 
+    if (op.val.equals(Operator.DOUBLE_LT)) // New Type DOUBLE
+	    return new BoolValue(v1.doubleValue() < v2.doubleValue());
+	if (op.val.equals(Operator.DOUBLE_GT))
+	    return new BoolValue(v1.doubleValue() > v2.doubleValue());
+	if (op.val.equals(Operator.DOUBLE_EQ))
+	    return new BoolValue(v1.doubleValue() == v2.doubleValue());
+	if (op.val.equals(Operator.DOUBLE_NE))
+	    return new BoolValue(v1.doubleValue() != v2.doubleValue());
+
+	if (op.val.equals(Operator.DOUBLE_PLUS)) 
+            return new DoubleValue(v1.doubleValue( ) + v2.doubleValue( ));
+        if (op.val.equals(Operator.DOUBLE_MINUS)) 
+            return new DoubleValue(v1.doubleValue( ) - v2.doubleValue( ));
+        if (op.val.equals(Operator.DOUBLE_TIMES)) 
+            return new DoubleValue(v1.doubleValue( ) * v2.doubleValue( ));
+        if (op.val.equals(Operator.DOUBLE_DIV)) 
+            return new DoubleValue(v1.doubleValue( ) / v2.doubleValue( ));
+
+
+
 	if (op.val.equals(Operator.BOOL_LT)) 
             return new BoolValue(v1.intValue( ) < v2.intValue( ));
         if (op.val.equals(Operator.BOOL_GT)) 
@@ -199,10 +219,18 @@ public class Semantics {
             return new IntValue(-v.intValue( ));
         else if (op.val.equals(Operator.FLOAT_NEG)) {
             return new FloatValue(-v.floatValue( ));
-        } else if (op.val.equals(Operator.I2F)) 
-            return new FloatValue((float)(v.intValue( ))); 
+        } 
+         else if (op.val.equals(Operator.DOUBLE_NEG)) { // New Type DOUBLE
+            return new DoubleValue(-v.doubleValue( ));
+        }
+        else if (op.val.equals(Operator.I2F)) 
+            return new FloatValue((float)(v.intValue( )));
+        else if (op.val.equals(Operator.I2D)) 
+            return new DoubleValue((double)(v.intValue( )));// New Type DOUBLE
         else if (op.val.equals(Operator.F2I))
             return new IntValue((int)(v.floatValue( )));
+        else if (op.val.equals(Operator.D2I))
+            return new IntValue((int)(v.doubleValue( )));// New Type DOUBLE
         else if (op.val.equals(Operator.C2I))
             return new IntValue((int)(v.charValue( )));
         else if (op.val.equals(Operator.I2C))
