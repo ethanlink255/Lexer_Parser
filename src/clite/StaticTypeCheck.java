@@ -227,7 +227,7 @@ public class StaticTypeCheck {
 			check( true, "should never reach here");
 		else
                 	check( typ1 == typ2 &&
-                       		(typ1 == Type.INT || typ1 == Type.FLOAT || typ1 = Type.DOUBLE)
+                       		(typ1 == Type.INT || typ1 == Type.FLOAT || typ1 == Type.DOUBLE)
                        		, "type error for " + b.op);
             } else if (b.op.RelationalOp( )) 
                 check( typ1 == typ2 , "type error for " + b.op);
