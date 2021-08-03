@@ -122,6 +122,7 @@ public class Lexer {
 
             case '&': check('&'); return Token.andTok;
             case '|': check('|'); return Token.orTok;
+	    case '^': check('^'); return Token.xorTok;
 
             case '=':
                 return chkOpt('=', Token.assignTok,
