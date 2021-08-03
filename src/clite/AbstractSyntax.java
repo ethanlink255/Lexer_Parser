@@ -258,6 +258,7 @@ class Type {
     final static Type CHAR = new Type("char");
     final static Type FLOAT = new Type("float");
     final static Type VOID = new Type("void");
+    final static Type DOUBLE = new Type("double") // New Type DOUBLE
     // final static Type UNDEFINED = new Type("undef");
     
     private String id;
@@ -272,6 +273,8 @@ class Type {
 		return "I";
 	else if (this.equals(Type.FLOAT))
 		return "F";
+    else if (this.equals(Type.DOUBLE)) // New Type DOUBLE
+		return "D";
 	else if (this.equals(Type.VOID))
 		return "V";
 	else
@@ -489,6 +492,11 @@ abstract class Value extends Expression {
         return 0.0f;
     }
 
+    double doubleValue ( ) { // New Type DOUBLE
+        assert false : "should never reach here";
+        return 0.0d;
+    }
+
     boolean isUndef( ) { return undef; }
 
     Type type ( ) { return type; }
@@ -498,6 +506,7 @@ abstract class Value extends Expression {
         if (type == Type.BOOL) return new BoolValue( );
         if (type == Type.CHAR) return new CharValue( );
         if (type == Type.FLOAT) return new FloatValue( );
+        if (type == Type.DOUBLE) return new DoubleValue( ); // New Type DOUBLE
         throw new IllegalArgumentException("Illegal type in mkValue");
     }
 }
@@ -588,6 +597,26 @@ class FloatValue extends Value {
 
 }
 
+class DoubleValue extends Value { // New Type DOUBLE
+    private double value = 0;
+
+    DoubleValue ( ) { type = Type.DOUBLE; }
+
+    DoubleValue (double v) { this( ); value = v; undef = false; }
+
+    double doubleValue ( ) {
+        assert !undef : "reference to undefined double value";
+        return value;
+    }
+
+    public String toString( ) {
+        if (undef)  return "undef";
+        return "" + value;
+    }
+
+}
+
+
 class Binary extends Expression {
 // Binary = Operator op; Expression term1, term2
     Operator op;
@@ -655,6 +684,7 @@ class Operator {
     // CastOp = int | float | char
     final static String INT = "int";
     final static String FLOAT = "float";
+    final static String DOUBLE = "double"; // New Type DOUBLE
     final static String CHAR = "char";
     // Typed Operators
     // RelationalOp = < | <= | == | != | >= | >
@@ -684,7 +714,21 @@ class Operator {
     final static String FLOAT_TIMES = "FLOAT*";
     final static String FLOAT_DIV = "FLOAT/";
     // UnaryOp = !    
-    final static String FLOAT_NEG = "FLOAT-NEG";
+    final static String FLOAT_NEG = "FLOAT-NEG";  
+    // RelationalOp = < | <= | == | != | >= | >
+    final static String DOUBLE_LT = "DOUBLE<";  // New Type DOUBLE
+    final static String DOUBLE_LE = "DOUBLE<=";
+    final static String DOUBLE_EQ = "DOUBLE==";
+    final static String DOUBLE_NE = "DOUBLE!=";
+    final static String DOUBLE_GT = "DOUBLE>";
+    final static String DOUBLE_GE = "DOUBLE>=";
+    // ArithmeticOp = + | - | * | /
+    final static String DOUBLE_PLUS = "DOUBLE+";
+    final static String DOUBLE_MINUS = "DOUBLE-";
+    final static String DOUBLE_TIMES = "DOUBLE*";
+    final static String DOUBLE_DIV = "DOUBLE/";
+    // UnaryOp = !    
+    final static String DOUBLE_NEG = "DOUBLE-NEG";
     // RelationalOp = < | <= | == | != | >= | >
     final static String CHAR_LT = "CHAR<";
     final static String CHAR_LE = "CHAR<=";
@@ -704,6 +748,8 @@ class Operator {
     final static String F2I = "F2I";
     final static String C2I = "C2I";
     final static String I2C = "I2C";
+    final static String I2D = "I2D";
+    final static String D2I = "D2I";
     
     String val;
     
@@ -723,13 +769,16 @@ class Operator {
             || val.equals(INT_PLUS) || val.equals(INT_MINUS)
             || val.equals(INT_TIMES) || val.equals(INT_DIV)
             || val.equals(FLOAT_PLUS) || val.equals(FLOAT_MINUS)
-            || val.equals(FLOAT_TIMES) || val.equals(FLOAT_DIV);
+            || val.equals(FLOAT_TIMES) || val.equals(FLOAT_DIV)
+            || val.equals(DOUBLE_PLUS) || val.equals(DOUBLE_MINUS) // New Type DOUBLE
+            || val.equals(DOUBLE_TIMES) || val.equals(DOUBLE_DIV);
     }
     boolean NotOp ( ) { return val.equals(NOT) ; }
     boolean NegateOp ( ) { return (val.equals(NEG) || val.equals(INT_NEG) || 
 				   val.equals(FLOAT_NEG)); }
     boolean intOp ( ) { return val.equals(INT); }
     boolean floatOp ( ) { return val.equals(FLOAT); }
+    boolean doubleOp ( ) { return val.equals(DOUBLE); } // New Type DOUBLE
     boolean charOp ( ) { return val.equals(CHAR); }
 
     final static String intMap[ ] [ ] = {
@@ -737,7 +786,8 @@ class Operator {
         {TIMES, INT_TIMES}, {DIV, INT_DIV},
         {EQ, INT_EQ}, {NE, INT_NE}, {LT, INT_LT},
         {LE, INT_LE}, {GT, INT_GT}, {GE, INT_GE},
-        {NEG, INT_NEG}, {FLOAT, I2F}, {CHAR, I2C}
+        {NEG, INT_NEG}, {FLOAT, I2F}, {CHAR, I2C},
+        {DOUBLE, I2D}
     };
 
     final static String floatMap[ ] [ ] = {
@@ -746,6 +796,14 @@ class Operator {
         {EQ, FLOAT_EQ}, {NE, FLOAT_NE}, {LT, FLOAT_LT},
         {LE, FLOAT_LE}, {GT, FLOAT_GT}, {GE, FLOAT_GE},
         {NEG, FLOAT_NEG}, {INT, F2I}
+    };
+
+    final static String doubleMap[ ] [ ] = {  // New Type DOUBLE
+        {PLUS, DOUBLE_PLUS}, {MINUS, DOUBLE_MINUS},
+        {TIMES, DOUBLE_TIMES}, {DIV, DOUBLE_DIV},
+        {EQ, DOUBLE_EQ}, {NE, DOUBLE_NE}, {LT, DOUBLE_LT},
+        {LE, DOUBLE_LE}, {GT, DOUBLE_GT}, {GE, DOUBLE_GE},
+        {NEG, DOUBLE_NEG}, {INT, D2I}
     };
 
     final static String charMap[ ] [ ] = {
@@ -774,6 +832,10 @@ class Operator {
 
     final static public Operator floatMap (String op) {
         return map (floatMap, op);
+    }
+
+    final static public Operator doubleMap (String op) { // New Type DOUBLE
+        return map (doubleMap, op);
     }
 
     final static public Operator charMap (String op) {

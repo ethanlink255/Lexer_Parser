@@ -170,6 +170,8 @@ public class StaticTypeCheck {
             if (b.op.ArithmeticOp( ))
                 if (typeOf(b.term1,tm)== Type.FLOAT || typeOf(b.term2,tm)== Type.FLOAT)
                     return (Type.FLOAT);
+				else if (typeOf(b.term1,tm)== Type.DOUBLE || typeOf(b.term2,tm)== Type.DOUBLE)
+                    return (Type.DOUBLE);
                 else return (Type.INT);
             if (b.op.RelationalOp( ) || b.op.BooleanOp( )) 
                 return (Type.BOOL);
@@ -180,6 +182,7 @@ public class StaticTypeCheck {
             else if (u.op.NegateOp( )) return typeOf(u.term,tm);
             else if (u.op.intOp( ))    return (Type.INT);
             else if (u.op.floatOp( )) return (Type.FLOAT);
+			else if (u.op.doubleOp( )) return (Type.DOUBLE);
             else if (u.op.charOp( ))  return (Type.CHAR);
         } if (e instanceof CallExpression) {
 	    CallExpression c = (CallExpression) e;
@@ -216,11 +219,15 @@ public class StaticTypeCheck {
             if (b.op.ArithmeticOp( )) {
 		if (typ1 == Type.FLOAT && typ2 == Type.INT) 
 			check( true, "should never reach here");
+		else if (typ1 == Type.DOUBLE && typ2 == Type.INT) 
+			check( true, "should never reach here");
 		else if (typ1 == Type.INT && typ2 == Type.FLOAT)		
+			check( true, "should never reach here");
+		else if (typ1 == Type.INT && typ2 == Type.DOUBLE)		
 			check( true, "should never reach here");
 		else
                 	check( typ1 == typ2 &&
-                       		(typ1 == Type.INT || typ1 == Type.FLOAT)
+                       		(typ1 == Type.INT || typ1 == Type.FLOAT || typ1 = Type.DOUBLE)
                        		, "type error for " + b.op);
             } else if (b.op.RelationalOp( )) 
                 check( typ1 == typ2 , "type error for " + b.op);
@@ -240,8 +247,8 @@ public class StaticTypeCheck {
 	    if (u.op.NotOp( ))
 		check( typ == Type.BOOL, u.op + ": non-bool operand");
 	    else if (u.op.NegateOp( ))
-		check( typ == Type.INT || typ == Type.FLOAT, "type error for " + u.op);
-	    else if (u.op.intOp( ) || u.op.floatOp( ) || u.op.charOp( ))
+		check( typ == Type.INT || typ == Type.FLOAT || typ == Type.DOUBLE, "type error for " + u.op);
+	    else if (u.op.intOp( ) || u.op.floatOp( ) || u.op.doubleOp( ) || u.op.charOp( ))
 		check( typ != Type.BOOL, u.op + ": bool operand");
 	    else
 		throw new IllegalArgumentException("should never reach here");
@@ -271,6 +278,11 @@ public class StaticTypeCheck {
 				check((current_arg_type == Type.FLOAT) ||
 					(current_arg_type  == Type.INT), 
 				"argument passed to function " + c.name + "not coercible to type float");	
+			}
+			else if (param_types.get(i).equals(Type.DOUBLE)) {
+				check((current_arg_type == Type.DOUBLE) ||
+					(current_arg_type  == Type.INT), 
+				"argument passed to function " + c.name + "not coercible to type double");	
 			}
 			else {
 				check(current_arg_type.equals(param_types.get(i)), 
@@ -302,6 +314,9 @@ public class StaticTypeCheck {
             Type srctype = typeOf(a.source, tm);
             if (ttype != srctype) {
                 if (ttype == Type.FLOAT)
+                    check( srctype == Type.INT
+                           , "mixed mode assignment to " + target);
+				else if (ttype == Type.DOUBLE)
                     check( srctype == Type.INT
                            , "mixed mode assignment to " + target);
                 else if (ttype == Type.INT)
@@ -362,6 +377,11 @@ public class StaticTypeCheck {
 				check((current_arg_type == Type.FLOAT) ||
 					(current_arg_type  == Type.INT), 
 				"argument passed to function " + c.name + "not coercible to type float");	
+			}
+			else if (param_types.get(i).equals(Type.DOUBLE)) {
+				check((current_arg_type == Type.DOUBLE) ||
+					(current_arg_type  == Type.INT), 
+				"argument passed to function " + c.name + "not coercible to type double");	
 			}
 			else {
 				check(current_arg_type.equals(param_types.get(i)), 

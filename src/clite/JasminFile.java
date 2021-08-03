@@ -109,6 +109,8 @@ public class JasminFile extends FileWriter {
 			method_sig += "I";
 		else if (return_type.equals(Type.FLOAT)) 
 			method_sig += "F";
+		else if (return_type.equals(Type.DOUBLE)) // New Type DOUBLE
+			method_sig += "D";
 		else // return_type is of type void
 			method_sig += "V";
 		
