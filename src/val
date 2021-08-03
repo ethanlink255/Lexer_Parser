@@ -1,0 +1,15 @@
+  Globals:
+    {<alpha, int>, <beta, int>}
+  Functions:
+    Function Name: main Type: int
+      Parameters:
+        None
+      Locals:
+        {<a, int>, <b, int>, <c, int>, <x, int>}
+      Block:
+        Assignment:
+          clite.Variable: x
+          clite.IntValue: 42
+        Assignment:
+          clite.Variable: alpha
+          clite.IntValue: 42

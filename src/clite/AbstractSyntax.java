@@ -51,6 +51,9 @@ class Program {
 			String branch2 = inner_display(spc, spc + spcing, b_node.term1);
 			String branch3 = inner_display(spc, spc + spcing, b_node.term2);
 			return prefix + branch1 + branch2 + branch3;
+		} else{
+			System.out.println(node);
+		
 		} if (node instanceof Assignment) {
 			Assignment a_node = (Assignment) node;
 			String prefix = spcing + "Assignment:\n";
@@ -365,8 +368,19 @@ class Loop extends Statement {
     Expression test;
     Statement body;
 
+    Assignment init;
+    Expression inc;
+
     Loop (Expression t, Statement b) {
         test = t; body = b;
+    }
+
+    //Overloaded for loop constructor
+    Loop(Assignment a, Expression t, Expression i, Statement b){
+	test = t;
+	body = b;
+	inc = i;
+	init = a;
     }
 
 	boolean hasReturn() {

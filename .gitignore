@@ -7,3 +7,4 @@
 /.vs/Lexer_Parser/v16/Browse.VC.db
 /.vs/Lexer_Parser/v16/.suo
 *.json
+*.class
