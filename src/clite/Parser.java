@@ -312,7 +312,7 @@ public class Parser {
 	}
 	return e; 
     }
-  
+	
     private Expression conjunction () {
         // Conjunction --> Equality { && Equality }
 	Expression e = equality();
@@ -440,8 +440,8 @@ public class Parser {
 		float f_val = Float.parseFloat(match(token.type()));
 		val = new FloatValue(f_val);
 	} else if (token.type().equals(TokenType.DoubleLiteral)) { // New Type DOUBLE
-		double f_val = Double.parseDouble(match(token.type()));
-		val = new DoubleValue(f_val);
+		double d_val = Double.parseDouble(match(token.type()));
+		val = new DoubleValue(d_val);
 	} else {
 		char c_val = match(token.type()).charAt(0);
 		val = new CharValue(c_val); 

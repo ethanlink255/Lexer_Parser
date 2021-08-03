@@ -58,12 +58,12 @@ public class Lexer {
             if (isLetter(ch)) { // ident or keyword
                 String spelling = concat(letters + digits);
                 return Token.keyword(spelling);
-            } else if (isDigit(ch)) { // int or float literal
+            } else if (isDigit(ch)) { // int or float
                 String number = concat(digits);
                 if (ch != '.')  // int Literal
                     return Token.mkIntLiteral(number);
                 number += concat(digits);
-                return Token.mkFloatLiteral(number);
+                return Token.mkDoubleLiteral(number);
             } else switch (ch) {
             case ' ': case '\t': case '\r': case eolnCh:
                 ch = nextChar();
