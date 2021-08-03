@@ -175,6 +175,8 @@ public class CodeGen {
 				store = "istore";
 			} else if (target_type.equals(Type.FLOAT)) {
 				store = "fstore";
+			} else if (target_type.equals(Type.DOUBLE)) { //New type DOUBLE
+				store = "dstore";
 			} else {
 				throw new IllegalArgumentException("should never reach here");
 			}
@@ -186,6 +188,8 @@ public class CodeGen {
 			descriptor.equals(Type.BOOL) || 
 			descriptor.equals(Type.CHAR))
 				type = "I";
+			else if (descriptor.equals(Type.DOUBLE)) // New Type DOUBLE
+				type = "D";
 			else // it's a float
 				type = "F";
 			jfile.writeln("putstatic " + jfile.get_class() + "/" 
@@ -273,6 +277,8 @@ public class CodeGen {
 	
 	if (e_type.equals(Type.FLOAT)) 
 		print_type = "F";
+	else if (e_type.equals(Type.DOUBLE)) // New type DOUBLE
+		print_type = "D";
 	else if (e_type.equals(Type.INT))
 		print_type = "I";
 	else if (e_type.equals(Type.CHAR)) 
@@ -303,6 +309,8 @@ public class CodeGen {
 	String j_type = typeOf(r.result, symtable).to_jasmin(); 
 	if (j_type.equals("I"))	
 		jfile.writeln("ireturn");
+	else if (j_type.equals("D"))	// New type DOUBLE
+		jfile.writeln("dreturn");
 	else // it's gotta be a float
 		jfile.writeln("freturn");
     }
@@ -321,6 +329,8 @@ public class CodeGen {
             if (b.op.ArithmeticOp( ))
                 if (typeOf(b.term1,sym)== Type.FLOAT)
                     return (Type.FLOAT);
+				else if (typeOf(b.term1,sym)== Type.DOUBLE) // New Type DOUBLE
+                    return (Type.DOUBLE);
                 else return (Type.INT);
             if (b.op.RelationalOp( ) || b.op.BooleanOp( )) 
                 return (Type.BOOL);
@@ -332,6 +342,7 @@ public class CodeGen {
             else if (u.op.NegateOp( )) return typeOf(u.term,sym);
             else if (u.op.intOp( ))    return (Type.INT);
             else if (u.op.floatOp( )) return (Type.FLOAT);
+			else if (u.op.doubleOp( )) return (Type.DOUBLE); // New Type DOUBLE
             else if (u.op.charOp( ))  return (Type.CHAR);
 	    System.out.println("nothing in Unary!");
         }
@@ -496,6 +507,86 @@ public class CodeGen {
 	// As Sherri says, the only meaning we're ever ascribing to these
 	// types of things lies in the encoding
 
+	if (op.val.equals(Operator.DOUBLE_LT)) { // New Type DOUBLE
+		jfile.writeln("dcmpl");
+		// 1 if its true
+		// -1 if its false
+		// 0 it its false
+
+		jfile.writeln("bipush 0");
+		jfile.write("\tif_icmplt ");
+		jfile.write_relop_body(branch_cnt);
+		branch_cnt++;
+		return;
+	} if (op.val.equals(Operator.DOUBLE_GT))  {
+		jfile.writeln("dcmpg");
+		// 1 if its true
+		// -1 if its false
+		// 0 it its false
+
+		jfile.writeln("bipush 0");
+		jfile.write("\tif_icmplt ");
+		jfile.write_relop_body(branch_cnt);
+		branch_cnt++;
+		return;
+	} if (op.val.equals(Operator.DOUBLE_EQ)) {
+		jfile.writeln("dcmpg");
+		// 1 if its true
+		// -1 if its false
+		// 0 it its false
+
+		jfile.writeln("bipush 0");
+		jfile.write("\tif_icmpeq ");
+		jfile.write_relop_body(branch_cnt);
+		branch_cnt++;
+		return;
+	} if (op.val.equals(Operator.DOUBLE_NE)) {
+		jfile.writeln("dcmpg");
+		// 1 if its true
+		// -1 if its false
+		// 0 it its false
+
+		jfile.writeln("bipush 0");
+		jfile.write("\tif_icmpne ");
+		jfile.write_relop_body(branch_cnt);
+		branch_cnt++;
+		return;
+	} if (op.val.equals(Operator.DOUBLE_GE)) {
+		jfile.writeln("dcmpg");
+		// 1 if its true
+		// -1 if its false
+		// 0 it its false
+
+		jfile.writeln("bipush 0");
+		jfile.write("\tif_icmpge ");
+		jfile.write_relop_body(branch_cnt);
+		branch_cnt++;
+		return;
+	} if (op.val.equals(Operator.DOUBLE_LE)) {
+		jfile.writeln("dcmpg");
+		// 1 if its true
+		// -1 if its false
+		// 0 it its false
+
+		jfile.writeln("bipush 0");
+		jfile.write("\tif_icmple ");
+		jfile.write_relop_body(branch_cnt);
+		branch_cnt++;
+		return;
+	} if (op.val.equals(Operator.DOUBLE_PLUS)) { 
+			jfile.writeln("dadd");
+            return;
+	} if (op.val.equals(Operator.DOUBLE_MINUS)) {
+			jfile.writeln("dsub");
+            return; 
+        } if (op.val.equals(Operator.DOUBLE_TIMES)) {
+			jfile.writeln("dmul");
+            return; 
+        } if (op.val.equals(Operator.DOUBLE_DIV)) {
+			jfile.writeln("ddiv");
+            return; 
+		}
+
 	//at this point two ints should be on the stack which are either 1 or 0
 	if (op.val.equals(Operator.OR)) {
 		jfile.writeln("ior"); 
@@ -527,6 +618,9 @@ public class CodeGen {
         } else if (op.val.equals(Operator.FLOAT_NEG)) {
 			jfile.writeln("fneg");
 			return;
+		} else if (op.val.equals(Operator.DOUBLE_NEG)) { // New Type DOUBLE
+			jfile.writeln("dneg");
+			return;
         } else if (op.val.equals(Operator.I2F)) {
 			jfile.writeln("i2f");
 			return;
@@ -543,7 +637,7 @@ public class CodeGen {
 
     void M (Expression e, SymbolTable symtable, JasminFile jfile) throws IOException { 
         if (e instanceof Value) {
-			if (e instanceof IntValue || e instanceof FloatValue) {
+			if (e instanceof IntValue || e instanceof FloatValue || e instanceof DoubleValue) { // New Type DOUBLE
 				jfile.writeln("ldc " + (Value)e);
             	return; 
 			} if (e instanceof BoolValue) {
@@ -565,6 +659,8 @@ public class CodeGen {
 				load = "iload";
 			} else if (v_type.equals(Type.FLOAT)) {
 				load = "fload";
+			} else if (v_type.equals(Type.DOUBLE)) { // New Type DOUBLE
+				load = "dload";
 			} else {
 				throw new IllegalArgumentException("should never reach here");
 			}
@@ -577,6 +673,8 @@ public class CodeGen {
 			descriptor.equals(Type.BOOL) || 
 			descriptor.equals(Type.CHAR))
 				type = "I";
+			else if (descriptor.equals(Type.DOUBLE)) // New Type DOUBLE
+				type = "D";
 			else // it's a float
 				type = "F";
 			jfile.writeln("getstatic " + jfile.get_class() + "/" 
