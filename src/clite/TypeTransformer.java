@@ -36,12 +36,11 @@ public class TypeTransformer {
             Expression t1 = T (b.term1, tm);
             Expression t2 = T (b.term2, tm);
             if (typ1 == Type.INT) {
-		if (typ2 == Type.FLOAT)
-			t1 = new Unary (new Operator(Operator.I2F), t1);
-		return new Binary(b.op.intMap(b.op.val), t1,t2);
-        else if (typ2 == Type.DOUBLE)  // New Type DOUBLE
-			t1 = new Unary (new Operator(Operator.I2D), t1);
-		return new Binary(b.op.intMap(b.op.val), t1,t2);
+				if (typ2 == Type.FLOAT)
+					t1 = new Unary (new Operator(Operator.I2F), t1);					
+				else if (typ2 == Type.DOUBLE)  // New Type DOUBLE
+					t1 = new Unary (new Operator(Operator.I2D), t1);
+				return new Binary(b.op.intMap(b.op.val), t1,t2);
             } else if (typ1 == Type.FLOAT) { 
 	        if (typ2 == Type.INT)	
 			t2 = new Unary (new Operator(Operator.I2F), t2);

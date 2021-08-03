@@ -258,7 +258,7 @@ class Type {
     final static Type CHAR = new Type("char");
     final static Type FLOAT = new Type("float");
     final static Type VOID = new Type("void");
-    final static Type DOUBLE = new Type("double") // New Type DOUBLE
+    final static Type DOUBLE = new Type("double"); // New Type DOUBLE
     // final static Type UNDEFINED = new Type("undef");
     
     private String id;
@@ -666,6 +666,7 @@ class Operator {
     // BooleanOp = && | ||
     final static String AND = "&&";
     final static String OR = "||";
+    final static String XOR = "^^";
     // RelationalOp = < | <= | == | != | >= | >
     final static String LT = "<";
     final static String LE = "<=";
@@ -758,7 +759,7 @@ class Operator {
     public String toString( ) { return val; }
     public boolean equals(Object obj) { return val.equals(obj); }
     
-    boolean BooleanOp ( ) { return val.equals(AND) || val.equals(OR); }
+    boolean BooleanOp ( ) { return val.equals(AND) || val.equals(OR) || val.equals(XOR); }
     boolean RelationalOp ( ) {
         return val.equals(LT) || val.equals(LE) || val.equals(EQ)
             || val.equals(NE) || val.equals(GT) || val.equals(GE);
@@ -815,7 +816,7 @@ class Operator {
     final static String boolMap[ ] [ ] = {
         {EQ, BOOL_EQ}, {NE, BOOL_NE}, {LT, BOOL_LT},
         {LE, BOOL_LE}, {GT, BOOL_GT}, {GE, BOOL_GE},
-	{OR, OR}, {AND, AND}, {NOT, NOT}
+	{OR, OR}, {AND, AND}, {NOT, NOT}, {XOR, XOR}
     };
 
     final static private Operator map (String[][] tmap, String op) {
