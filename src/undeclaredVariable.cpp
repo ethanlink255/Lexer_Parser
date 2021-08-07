@@ -1,29 +1,20 @@
-// a first program with
-// two comment lines
+// Test Program for changes in clite
+// This file is still undeclaredVariable.cpp
+// because undeclaredVariable.cpp is hardcoded
+// into Parser.java as the input file
 int main() {
     double steve;
-    char c;
-    int i;
-    bool l;
     bool r;
+    bool l;
     bool a;
-
     r = true;
     l = true;
-    a = r ^^ l;
+    a = r ^^ l; //execution of new xor operator
 
-//    for ( int i = 0; i < 5; i = i + 1 ) {
-//	print("MEOW");
-//    }
-    steve = 3.1d;
-    steve = steve + 3;
-    c = 'h';
-    i = c + 3;
-    qqq = 999;
-    x = y + 5;
-//    while (1)  x = 42;
-
+    steve = 3.1d; //execution of new double type
+    steve = steve + 3.4d;
     do {
 	steve = steve + 3.1d;
     } while (a && !r);
-} // main
+
+}
