@@ -63,7 +63,11 @@ public class Lexer {
                 if (ch != '.')  // int Literal
                     return Token.mkIntLiteral(number);
                 number += concat(digits);
-                return Token.mkDoubleLiteral(number);
+                if (ch == 'd') {
+                    ch = nextChar(); // skip over d
+                    return Token.mkDoubleLiteral(number);
+                }
+                return Token.mkFloatLiteral(number);
             } else switch (ch) {
             case ' ': case '\t': case '\r': case eolnCh:
                 ch = nextChar();
@@ -122,7 +126,7 @@ public class Lexer {
 
             case '&': check('&'); return Token.andTok;
             case '|': check('|'); return Token.orTok;
-	    case '^': check('^'); return Token.xorTok;
+	        case '^': check('^'); return Token.xorTok;
 
             case '=':
                 return chkOpt('=', Token.assignTok,
