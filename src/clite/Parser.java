@@ -213,6 +213,8 @@ public class Parser {
 		s = ifStatement();
 	} else if (token.type().equals(TokenType.While)) {
 		s = whileStatement();
+	} else if (token.type().equals(TokenType.For)) {
+		s = forStatement();
 	} else if (token.type().equals(TokenType.Return)) {
 		s = returnStatement();
 		match(TokenType.Semicolon);
@@ -287,6 +289,19 @@ public class Parser {
         return new Loop(test, st);  // student exercise
     }
 
+    private Loop forStatement() {
+	// forStatement --> for( ass; expr, inc) Statement
+	match(token.type());
+	match(TokenType.LeftParen);
+	Assignment ass = assignment();
+	match(TokenType.Semicolon);
+	Expression test = expression();
+	match(TokenType.Semicolon);
+	Expression inc = expression(); //addition
+	match(TokenType.RightParen);
+	Statement st = statement();
+	return new Loop(test, st);
+
     private Return returnStatement() {
     	match(TokenType.Return);
 	Expression result = expression();
@@ -305,14 +320,20 @@ public class Parser {
     private Expression expression () {
         // Expression --> Conjunction { || Conjunction }
 	Expression e = conjunction();
-	while (token.type().equals(TokenType.Or)) {
-		Operator op = new Operator(match(TokenType.Or));
+	while (token.type().equals(TokenType.Or) || token.type().equals(TokenType.Xor)) {
+		Operator op;
+		if (token.type().equals(TokenType.Or)) {
+			op = new Operator(match(TokenType.Or));
+		} else {
+			op = new Operator(match(TokenType.Xor));
+		}
+
 		Expression expr2 = conjunction();
 		e = new Binary(op, e, expr2);
 	}
-	return e; 
+	return e;
     }
-	
+
     private Expression conjunction () {
         // Conjunction --> Equality { && Equality }
 	Expression e = equality();
