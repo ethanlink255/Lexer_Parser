@@ -46,7 +46,6 @@ public class Parser {
 	while (isType()) {
 		Type t = type();
 		token = lexer.next();
-		System.out.println("TOKEN   " + token);
 		if (token.type().equals(TokenType.Main))
 			break;
 		String id = match(TokenType.Identifier);
