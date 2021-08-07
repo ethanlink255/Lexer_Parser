@@ -301,6 +301,7 @@ public class Parser {
 	match(TokenType.RightParen);
 	Statement st = statement();
 	return new Loop(test, st);
+    }
 
     private Return returnStatement() {
     	match(TokenType.Return);
