@@ -12,14 +12,18 @@ int main() {
     l = true;
     a = r ^^ l;
 
-//   for ( int i = 0; i < 5; i = i + 1 ) {
+//    for ( int i = 0; i < 5; i = i + 1 ) {
 //	print("MEOW");
-  //  }
+//    }
     steve = 3.1d;
     steve = steve + 3;
     c = 'h';
     i = c + 3;
     qqq = 999;
     x = y + 5;
-    while (1)  x = 42;
+//    while (1)  x = 42;
+
+    do {
+	steve = steve + 3.1d;
+    } while (a && !r);
 } // main

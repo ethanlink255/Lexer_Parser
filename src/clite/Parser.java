@@ -46,6 +46,7 @@ public class Parser {
 	while (isType()) {
 		Type t = type();
 		token = lexer.next();
+		System.out.println("TOKEN   " + token);
 		if (token.type().equals(TokenType.Main))
 			break;
 		String id = match(TokenType.Identifier);
@@ -213,8 +214,8 @@ public class Parser {
 		s = ifStatement();
 	} else if (token.type().equals(TokenType.While)) {
 		s = whileStatement();
-	} else if (token.type().equals(TokenType.For)) {
-		s = forStatement();
+	} else if (token.type().equals(TokenType.DoWhile)) {
+		s = doWhileStatement();
 	} else if (token.type().equals(TokenType.Return)) {
 		s = returnStatement();
 		match(TokenType.Semicolon);
@@ -289,17 +290,15 @@ public class Parser {
         return new Loop(test, st);  // student exercise
     }
 
-    private Loop forStatement() {
+    private Loop doWhileStatement() {
 	// forStatement --> for( ass; expr, inc) Statement
 	match(token.type());
-	match(TokenType.LeftParen);
-	Assignment ass = assignment();
-	match(TokenType.Semicolon);
-	Expression test = expression();
-	match(TokenType.Semicolon);
-	Expression inc = expression(); //addition
-	match(TokenType.RightParen);
 	Statement st = statement();
+	match(TokenType.While);
+	match(TokenType.LeftParen);
+	Expression test = expression();
+	match(TokenType.RightParen);
+	match(TokenType.Semicolon);
 	return new Loop(test, st);
     }
 
