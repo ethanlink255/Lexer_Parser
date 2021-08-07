@@ -51,10 +51,9 @@ class Program {
 			String branch2 = inner_display(spc, spc + spcing, b_node.term1);
 			String branch3 = inner_display(spc, spc + spcing, b_node.term2);
 			return prefix + branch1 + branch2 + branch3;
-		} else{
-			System.out.println(node);
+		} 
 		
-		} if (node instanceof Assignment) {
+		if (node instanceof Assignment) {
 			Assignment a_node = (Assignment) node;
 			String prefix = spcing + "Assignment:\n";
 			String branch1 = inner_display(spc, spc + spcing, a_node.target);
