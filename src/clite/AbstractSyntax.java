@@ -494,7 +494,7 @@ abstract class Value extends Expression {
 
     double doubleValue ( ) { // New Type DOUBLE
         assert false : "should never reach here";
-        return 0.0d;
+        return 0.0f;
     }
 
     boolean isUndef( ) { return undef; }

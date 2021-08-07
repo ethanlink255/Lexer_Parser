@@ -594,6 +594,9 @@ public class CodeGen {
 	} if (op.val.equals(Operator.AND)) {
 		jfile.writeln("iand");
 		return;
+	} if (op.val.equals(Operator.XOR)) {
+		jfile.writeln("ixor");
+		return;
 	} if (op.val.equals(Operator.NOT)) {
 	//	jfile.writeln("negate");
 		return;
